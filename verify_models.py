@@ -1,21 +1,42 @@
 import os
-from huggingface_hub import hf_hub_download
+from transformers import pipeline
 
-models = [
-    'ai4bharat/indicwav2vec-hindi',
-    'vasista22/whisper-kannada-base',
-    'adimyth/indicwav2vec-marathi',
-    'adimyth/indicwav2vec-tamil',
-    'adimyth/indicwav2vec-telugu'
-]
+HF_MODEL_DICT = {
+    "hi": "ai4bharat/indicwav2vec-hindi",
+    "kn": "vasista22/whisper-kannada-base",
+    "mr": "adimyth/indicwav2vec-marathi",
+    "ta": "adimyth/indicwav2vec-tamil",
+    "te": "adimyth/indicwav2vec-telugu",
+}
 
-for repo in models:
+base_path = "/tmp/huggingface_models"
+
+for lang, repo in HF_MODEL_DICT.items():
     try:
-        model_path = hf_hub_download(repo_id=repo, filename='pytorch_model.bin', local_files_only=True)
-        assert os.path.exists(model_path), f'Model file for {repo} not found'
-        print(f'Model {repo} verified successfully')
+        model_path = os.path.join(base_path, lang)
+
+        if lang == "kn":
+            transcriber = pipeline(
+                task="automatic-speech-recognition",
+                model=model_path,
+                chunk_length_s=30,
+                device="cpu",
+            )
+            transcriber.model.config.forced_decoder_ids = (
+                transcriber.tokenizer.get_decoder_prompt_ids(
+                    language="kn", task="transcribe"
+                )
+            )
+        else:
+            transcriber = pipeline(
+                "automatic-speech-recognition",
+                model=model_path,
+                device="cpu",
+            )
+
+        print(f"Model for {lang} verified successfully")
     except Exception as e:
-        print(f'Error verifying model {repo}: {str(e)}')
+        print(f"Error verifying model for {lang}: {str(e)}")
         exit(1)
 
-print('All models verified successfully')
+print("All models verified successfully")
