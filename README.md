@@ -16,9 +16,7 @@ python3 src/handler.py --rp_serve_api --rp_api_host 0.0.0.0 --rp_log_level DEBUG
 curl --location 'http://0.0.0.0:8000/runsync' \
 --header 'accept: application/json' \
 --header 'Content-Type: application/json' \
---data '{
-  "input": {"sentence": "प्रत्येक व्यक्ति को शिक्षा का अधिकार है । शिक्षा कम से कम प्रारम्भिक और बुनियादी अवस्थाओं में निःशुल्क होगी ।", "language": "hi"}
-}'
+--data '{"audioURL": "https://cdn-aditya-dev.enparadigmtech.com/1eeb9065-a923-419d-9e64-891f5ba6f8d0.wav", "language": "hi"}'
 ```
 
 > [!NOTE]
