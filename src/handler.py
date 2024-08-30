@@ -84,9 +84,11 @@ async def download_audio(url: str):
 
 
 async def handler(event):
-    # Extract sentence and language from event
-    audioURL = event.get("audioURL", "")
-    language = event.get("language", "")
+    input_data = event.get("input", {})
+
+    # Extract sentence and language
+    audioURL = input_data.get("audioURL", "")
+    language = input_data.get("language", "")
 
     # Error handling in case of invalid input
     if not audioURL:
