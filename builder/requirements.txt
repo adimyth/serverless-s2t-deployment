@@ -6,4 +6,4 @@ loguru==0.7.2
 aiohttp==3.9.3
 librosa==0.8.0
 pydub==0.25.1
-numpy==1.21.6
+numpy==1.22.0
