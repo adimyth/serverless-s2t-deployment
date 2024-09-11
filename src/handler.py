@@ -26,13 +26,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Given a language, the function returns the corresponding transformers pipeline
 def get_model(language):
-    model_path = f"/tmp/huggingface_models/{language}"
-    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model_name = HF_MODEL_DICT.get(language)
 
     if language == "kn":
         transcriber = pipeline(
             task="automatic-speech-recognition",
-            model=model_path,
+            model=model_name,
             chunk_length_s=30,
             device=device,
             token=os.getenv("RUNPOD_HF_API_KEY"),
@@ -48,7 +47,7 @@ def get_model(language):
         return pipeline(
             "automatic-speech-recognition",
             chunk_length_s=30,
-            model=model_path,
+            model=model_name,
             device=device,
             token=os.getenv("RUNPOD_HF_API_KEY"),
         )
