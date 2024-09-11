@@ -34,7 +34,7 @@ def get_model(language):
             model=model_name,
             chunk_length_s=30,
             device=device,
-            token=os.getenv("RUNPOD_HF_API_KEY"),
+            token=os.getenv("RUNPOD_SECRET_HF_API_KEY"),
         )
         transcriber.model.config.forced_decoder_ids = (
             transcriber.tokenizer.get_decoder_prompt_ids(
@@ -49,7 +49,7 @@ def get_model(language):
             chunk_length_s=30,
             model=model_name,
             device=device,
-            token=os.getenv("RUNPOD_HF_API_KEY"),
+            token=os.getenv("RUNPOD_SECRET_HF_API_KEY"),
         )
 
 
