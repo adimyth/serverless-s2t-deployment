@@ -12,30 +12,24 @@ Before running the project, you need to build a Docker image that includes the n
 
 1. Ensure you have Docker installed on your system.
 
-2. Set your HuggingFace API key as an environment variable:
-   ```bash
-   export HF_API_KEY=your_huggingface_api_key
-   ```
-3. Build the Docker image:
+2. Build the Docker image:
     ```bash
-      docker build --build-arg HF_API_KEY=$HF_API_KEY -t ai4bharat-s2t-runpod .
-      ```
-  This command builds the Docker image with the tag `ai4bharat-s2t-runpod`. The `--build-arg` flag passes your HuggingFace API key to the build process, allowing it to download the private model during the build. 
+    docker image build -f Dockerfile -t adimyth/serverless-stt-deployment:v1.1.0 .
+    ```
+  This command builds the Docker image with the tag `adimyth/serverless-stt-deployment:v1.1.0`
   
-> This is needed because I had pushed the weights to my HF account.
+> [!NOTE]
+> I am passing my HF API token as environment in the application. This downloads the model from my private repo.
 
-
-**Why build a custom Docker image?**
-* It includes all necessary dependencies.
-* The model is pre-downloaded, reducing startup time when deploying to serverless GPUs.
-* It ensures consistency across all deployments.
-* It optimizes for the RunPod environment.
 
 ### Running the project locally
 
 1. Clone the repository
 2. Install the requirements
 ```bash
+python3 -m venv .venv
+source .venv/bin/activate
+
 pip install -r builder/requirements.txt
 ```
 3. Run the project. Refer the [docs](https://docs.runpod.io/serverless/workers/development/overview) for more options. This will start the FastAPI server on the specified host at port 8000.
@@ -53,7 +47,7 @@ curl --location 'http://0.0.0.0:8000/runsync' \
 ### Running with Docker
 After building the image, you can run the container:
 ```bash
-docker run -p 8000:8000 ai4bharat-s2t-runpod
+docker run -p 8000:8000 adimyth/serverless-stt-deployment:v1.1.0
 ```
 This command runs the container and maps port 8000 from the container to port 8000 on your host machine.
 

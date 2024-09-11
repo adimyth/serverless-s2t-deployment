@@ -17,7 +17,6 @@ load_dotenv()
 HF_MODEL_DICT = {
     "hi": "ai4bharat/indicwav2vec-hindi",
     "kn": "vasista22/whisper-kannada-base",
-    "mr": "adimyth/indicwav2vec-marathi",
     "ta": "adimyth/indicwav2vec-tamil",
     "te": "adimyth/indicwav2vec-telugu",
 }
@@ -36,6 +35,7 @@ def get_model(language):
             model=model_path,
             chunk_length_s=30,
             device=device,
+            token=os.getenv("RUNPOD_HF_API_KEY"),
         )
         transcriber.model.config.forced_decoder_ids = (
             transcriber.tokenizer.get_decoder_prompt_ids(
@@ -44,7 +44,14 @@ def get_model(language):
         )
         return transcriber
     else:
-        return pipeline("automatic-speech-recognition", model=model_path, device=device)
+        # TODO: Play around with chunk_length_s to get the best results
+        return pipeline(
+            "automatic-speech-recognition",
+            chunk_length_s=30,
+            model=model_path,
+            device=device,
+            token=os.getenv("RUNPOD_HF_API_KEY"),
+        )
 
 
 # Load model and tokenizer outside the handler
