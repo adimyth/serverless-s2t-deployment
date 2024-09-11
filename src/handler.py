@@ -2,7 +2,7 @@ import io
 import os
 
 import aiohttp
-import librosa
+from scipy import signal
 import numpy as np
 import runpod
 import torch
@@ -82,6 +82,16 @@ async def download_audio(url: str):
                 logger.exception(f"Failed to load audio file: {e}")
 
 
+def resample(audio, orig_sr, target_sr):
+    # Calculate the number of samples in the resampled audio
+    num_samples = int(len(audio) * float(target_sr) / orig_sr)
+
+    # Use scipy's resample function
+    resampled = signal.resample(audio, num_samples)
+
+    return resampled
+
+
 async def handler(event):
     input_data = event.get("input", {})
 
@@ -103,8 +113,14 @@ async def handler(event):
     # Inference
     audio = audio.astype(np.float32)
     audio /= np.max(np.abs(audio))
-    audio_resampled = librosa.resample(audio, orig_sr=sr, target_sr=16000)
+
+    # Resample audio to 16000 Hz
+    audio_resampled = resample(audio, orig_sr=sr, target_sr=16000)
+
+    # Fetch the transcriber for the given language
     transcriber = LANG_MODELS.get(language)
+
+    # Transcribe the audio
     trans = transcriber(audio_resampled)
 
     return {"text": trans["text"]}

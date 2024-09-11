@@ -47,7 +47,7 @@ curl --location 'http://0.0.0.0:8000/runsync' \
 ### Running with Docker
 After building the image, you can run the container:
 ```bash
-docker run -p 8000:8000 adimyth/serverless-stt-deployment:v1.1.0
+docker container run -e RUNPOD_HF_API_KEY="YOUR_HF_API_KEY" -p 8000:8000 adimyth/serverless-stt-deployment:v1.1.0
 ```
 This command runs the container and maps port 8000 from the container to port 8000 on your host machine.
 
