@@ -27,30 +27,14 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # Given a language, the function returns the corresponding transformers pipeline
 def get_model(language):
     model_name = HF_MODEL_DICT.get(language)
-
-    if language == "kn":
-        transcriber = pipeline(
-            task="automatic-speech-recognition",
-            model=model_name,
-            chunk_length_s=30,
-            device=device,
-            token=os.getenv("RUNPOD_SECRET_HF_API_KEY"),
-        )
-        transcriber.model.config.forced_decoder_ids = (
-            transcriber.tokenizer.get_decoder_prompt_ids(
-                language="kn", task="transcribe"
-            )
-        )
-        return transcriber
-    else:
-        # TODO: Play around with chunk_length_s to get the best results
-        return pipeline(
-            "automatic-speech-recognition",
-            chunk_length_s=30,
-            model=model_name,
-            device=device,
-            token=os.getenv("RUNPOD_SECRET_HF_API_KEY"),
-        )
+    print(f"Loading model for {language} with model name: {model_name}")
+    return pipeline(
+        "automatic-speech-recognition",
+        chunk_length_s=30,
+        model=model_name,
+        device=device,
+        token=os.getenv("RUNPOD_SECRET_HF_API_KEY"),
+    )
 
 
 # Load model and tokenizer outside the handler
