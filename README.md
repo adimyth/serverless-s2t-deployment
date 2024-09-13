@@ -54,3 +54,5 @@ This command runs the container and maps port 8000 from the container to port 80
 > [!NOTE]
 > The weights were openly available. I just pushed the weights to my HF account and used the HF API as well as the pipeline to load & infer the model making it a whole lot easier
 
+## TODO
+- [ ] Make the model weights part of the docker image?

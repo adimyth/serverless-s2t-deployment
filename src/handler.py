@@ -16,7 +16,7 @@ load_dotenv()
 
 HF_MODEL_DICT = {
     "hi": "ai4bharat/indicwav2vec-hindi",
-    "kn": "vasista22/whisper-kannada-base",
+    "kn": "ai4bharat/indicwav2vec-kannada",
     "ta": "adimyth/indicwav2vec-tamil",
     "te": "adimyth/indicwav2vec-telugu",
 }
